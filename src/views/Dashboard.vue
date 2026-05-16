@@ -57,7 +57,7 @@ onMounted(async () => {
     announcements.value = data || []
   } catch (e) {
     console.error(e)
-  }
+  }//22222喵喵
 })
 </script>
 
