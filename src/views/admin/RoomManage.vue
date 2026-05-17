@@ -42,10 +42,22 @@
           <el-input v-model="form.location" placeholder="请输入位置" />
         </el-form-item>
         <el-form-item label="开放时间">
-          <el-time-picker v-model="form.openTime" placeholder="选择时间" />
+          <el-time-picker 
+            v-model="form.openTime" 
+            placeholder="选择时间"
+            :picker-options="{ selectableRange: '06:00:00 - 22:00:00', step: '01:00:00' }"
+            format="HH:mm"
+            value-format="HH:mm"
+          />
         </el-form-item>
         <el-form-item label="关闭时间">
-          <el-time-picker v-model="form.closeTime" placeholder="选择时间" />
+          <el-time-picker 
+            v-model="form.closeTime" 
+            placeholder="选择时间"
+            :picker-options="{ selectableRange: '06:00:00 - 22:00:00', step: '01:00:00' }"
+            format="HH:mm"
+            value-format="HH:mm"
+          />
         </el-form-item>
         <el-form-item label="总行数">
           <el-input v-model.number="form.totalRow" type="number" placeholder="请输入总行数" min="1" />
