@@ -49,13 +49,12 @@
             </div>
 
             <div v-if="selectedSeatForSeatMode" class="time-slot-container">
-              <h4>选择时段（可多选连续时段）</h4>
+              <h4>{{ selectedDate.toLocaleDateString('zh-CN') }} 可用时段（可多选连续时段）</h4>
               <el-checkbox-group v-model="selectedSlotsForSeatMode" class="time-slots-grid">
                 <el-checkbox
-                  v-for="slot in allTimeSlots"
+                  v-for="slot in availableTimeSlots"
                   :key="slot.value"
                   :label="slot.value"
-                  :disabled="isSlotBookedForSeatMode(slot.value)"
                   class="time-slot-checkbox"
                 >
                   {{ slot.label }}
@@ -241,10 +240,26 @@ const getSeatClass = (seat) => {
   }
 }
 
-const isSlotBookedForSeatMode = (slotValue) => {
-  const slot = seatSlots.value.find(s => s.slot === slotValue)
-  return slot && slot.available !== 1
+const isSlotAvailableForSeatMode = (slotValue) => {
+  return seatSlots.value.some(slot => {
+    return slotValue >= slot.start && slotValue < slot.end
+  })
 }
+
+const availableTimeSlots = computed(() => {
+  const availableSlots = []
+  seatSlots.value.forEach(slot => {
+    const startIndex = allTimeSlots.findIndex(s => s.value === slot.start)
+    const endIndex = allTimeSlots.findIndex(s => s.value === slot.end)
+    
+    for (let i = startIndex; i < endIndex; i++) {
+      if (!availableSlots.includes(allTimeSlots[i].value)) {
+        availableSlots.push(allTimeSlots[i].value)
+      }
+    }
+  })
+  return allTimeSlots.filter(slot => availableSlots.includes(slot.value))
+})
 
 const confirmBookingBySeat = async () => {
   if (!selectedSeatForSeatMode.value || selectedSlotsForSeatMode.length === 0) {
