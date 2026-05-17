@@ -72,13 +72,26 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="seatsDialogVisible" title="座位管理" width="900px">
+    <el-dialog v-model="seatsDialogVisible" title="座位管理" width="1000px">
       <el-table :data="seats">
-        <el-table-column prop="id" label="ID" width="80" />
-        <el-table-column prop="seatNo" label="座位号" width="120" />
+        <el-table-column prop="id" label="座位ID" width="80" />
         <el-table-column label="位置" width="150">
           <template #default="{ row }">
             第{{ row.row }}排 第{{ row.col }}列
+          </template>
+        </el-table-column>
+        <el-table-column label="是否靠窗" width="120">
+          <template #default="{ row }">
+            <el-tag :type="row.hasWindow === 1 ? 'success' : 'info'">
+              {{ row.hasWindow === 1 ? '是' : '否' }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否有电源" width="120">
+          <template #default="{ row }">
+            <el-tag :type="row.hasPower === 1 ? 'success' : 'info'">
+              {{ row.hasPower === 1 ? '是' : '否' }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" width="120">
@@ -89,9 +102,8 @@
         <el-table-column label="操作" width="200">
           <template #default="{ row }">
             <el-select v-model="row.editStatus" placeholder="修改状态" style="width: 120px;">
-              <el-option label="可用" :value="0" />
-              <el-option label="维修中" :value="2" />
-              <el-option label="禁用" :value="3" />
+              <el-option label="可用" :value="1" />
+              <el-option label="不可用" :value="0" />
             </el-select>
             <el-button type="text" @click="handleUpdateStatus(row)">更新</el-button>
           </template>
@@ -123,20 +135,16 @@ const form = ref({
 
 const getStatusType = (status) => {
   const map = {
-    0: 'success',
-    1: 'danger',
-    2: 'warning',
-    3: 'info'
+    0: 'danger',
+    1: 'success'
   }
   return map[status] || 'info'
 }
 
 const getStatusText = (status) => {
   const map = {
-    0: '可用',
-    1: '已预约',
-    2: '维修中',
-    3: '禁用'
+    0: '不可用',
+    1: '可用'
   }
   return map[status] || '未知'
 }
