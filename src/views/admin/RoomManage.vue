@@ -47,6 +47,12 @@
         <el-form-item label="关闭时间">
           <el-time-picker v-model="form.closeTime" placeholder="选择时间" />
         </el-form-item>
+        <el-form-item label="总行数">
+          <el-input v-model.number="form.totalRow" type="number" placeholder="请输入总行数" min="1" />
+        </el-form-item>
+        <el-form-item label="总列数">
+          <el-input v-model.number="form.totalCol" type="number" placeholder="请输入总列数" min="1" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="dialogVisible = false">取消</el-button>
@@ -98,7 +104,9 @@ const form = ref({
   name: '',
   location: '',
   openTime: null,
-  closeTime: null
+  closeTime: null,
+  totalRow: null,
+  totalCol: null
 })
 
 const getStatusType = (status) => {
@@ -139,11 +147,13 @@ const handleAddRoom = async () => {
       name: form.value.name,
       location: form.value.location,
       openTime: form.value.openTime,
-      closeTime: form.value.closeTime
+      closeTime: form.value.closeTime,
+      totalRow: form.value.totalRow,
+      totalCol: form.value.totalCol
     })
     ElMessage.success('添加成功')
     dialogVisible.value = false
-    form.value = { name: '', location: '', openTime: null, closeTime: null }
+    form.value = { name: '', location: '', openTime: null, closeTime: null, totalRow: null, totalCol: null }
     loadRooms()
   } catch (e) {
     ElMessage.error('添加失败')
